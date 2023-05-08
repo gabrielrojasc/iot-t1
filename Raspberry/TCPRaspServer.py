@@ -1,7 +1,7 @@
 import socket
 
 # "192.168.5.177"  # Standard loopback interface address (localhost)
-HOST = "192.168.100.31"#"localhost"
+HOST = "192.168.5.177"#"localhost"
 PORT = 5000  # Port to listen on (non-privileged ports are > 1023)
 
 s = socket.socket(socket.AF_INET, #internet
@@ -20,8 +20,7 @@ while True:
         except ConnectionResetError:
             break
         print(f"Recibido {data}")
-        #conn.send(data.encode())
-        conn.send(data)
+        conn.send(data.encode())
 
     conn.close()
     print('Desconectado')

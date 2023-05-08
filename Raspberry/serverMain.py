@@ -1,0 +1,88 @@
+import socket
+
+from desempaquetamiento import HEADER_LENGTH
+from desempaquetamiento import get_msg_length, parse_data
+
+
+def TCP_frag_recv(conn):
+    doc = b""
+    while True:
+        try:
+            conn.settimeout(5)
+            data = conn.recv(1024)
+            if data == b'\0':
+                break
+            else:
+                doc += data
+        except TimeoutError:
+            conn.send(b'\0')
+            raise
+        except Exception:
+            conn.send(b'\0')
+            raise
+        conn.send(b'\1')
+    return doc
+
+def UDP_frag_recv(s):
+    doc = b""
+    addr = None
+    while True:
+        try:
+
+            data, addr = s.recvfrom(1024)
+            if data == b'\0':
+                break
+            else:
+                doc += data
+        except TimeoutError:
+            raise
+        except Exception:
+            raise
+        # s.sendto(b'\1', addr)
+    return (doc, addr)
+
+
+# TCP SOCKET
+# "192.168.5.177"  # Standard loopback interface address (localhost)
+HOST = "192.168.100.31"#"localhost"
+PORT = 5000  # Port to listen on (non-privileged ports are > 1023)
+
+
+s = socket.socket(socket.AF_INET, #internet
+                  socket.SOCK_STREAM) #TCP
+s.bind((HOST, PORT))
+s.listen(5)
+print(f"Listening on {HOST}:{PORT}")
+
+# UDP SOCKET
+UDP_PORT = 5010
+
+sUDP = socket.socket(socket.AF_INET, # Internet
+                     socket.SOCK_DGRAM) # UDP
+sUDP.bind((HOST, UDP_PORT))
+
+# TCP: 1; UDP: 0
+transport_layer = 1
+buffer = 1024
+
+while True:
+    conn, addr = s.accept()
+    print(f'Conectado por alguien ({addr[0]}) desde el puerto {addr[1]}')
+    data = b""
+    while True:
+        try:
+            if transport_layer == 1: # TCP
+                data = TCP_frag_recv(conn)
+            else: # UDP
+                data = UDP_frag_recv(sUDP)
+        except ConnectionResetError:
+            break
+
+        parsed_data = parse_data(data)
+
+        print(f"Recibido:\n{parsed_data}")
+        #conn.send(data)
+
+    conn.close()
+    print('Desconectado')
+
