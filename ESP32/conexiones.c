@@ -1,3 +1,10 @@
+#include "packeting.c"
+#include <stdlib.h>
+#include <string.h>
+#include <sys/socket.h>
+#include "esp_netif.h"
+#include "esp_log.h"
+
 /*
 - Wifi_connect(Name_SSID, PASS), función para realizar la conexión wifi, esto se realiza dentro del ejemplo.
 - TCP_connect/UDP_connect(IPV4, PORT), realiza la conexión con un socket TCP/UDP.
@@ -13,9 +20,11 @@ int Wifi_connect(char* Name_SSID, char* PASS) {
  int TCP_send_frag(int sock, char status, char protocolo)
 {
     //Parte el mensaje (payload) en trozos de 1000 btyes y los manda por separado, esperando un OK con cada trozo
+    static const char* TAG = "MyModule";
     printf("Sending!\n");
     char *payload = mensaje(protocolo, status);
     int payloadLen = messageLength(protocolo) - 1;
+    int PACK_LEN = 128;
     char rx_buffer[128];
 
     for (int i = 0; i < payloadLen; i += PACK_LEN)
