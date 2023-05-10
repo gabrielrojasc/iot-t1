@@ -1,0 +1,14 @@
+{
+  "cmake.configureOnOpen": true,
+  "idf.adapterTargetName": "esp32",
+  "files.associations": {
+    "*.html": "jinja-html",
+    "__config": "c",
+    "memory": "c",
+    "__string": "c",
+    "__undef_macros": "c",
+    "algorithm": "c",
+    "new": "c",
+    "complex": "c"
+  }
+}
