@@ -38,12 +38,13 @@ def prot_unpack(protocol: int, data):
     protocol_unpack = ["<2Bl", "<2BlBfBf", "<2BlBfBff", "<2BlBfB8f", "<2BlBfBf6000f"]
     array = unpack(protocol_unpack[protocol], data)
     if protocol == 4:
-        print(array)
+        pad = 7
+        l_arr = 2000
         array = (
-            *array[:16],
-            array[16 : 16 + 2000],
-            array[16 + 2000 : 16 + 4000],
-            array[16 + 4000 :],
+            *array[:pad],
+            array[pad : pad + l_arr],
+            array[pad + l_arr : pad + 2 * l_arr],
+            array[pad + 2 * l_arr :],
         )
     return array
 
