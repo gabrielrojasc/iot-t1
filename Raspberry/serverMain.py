@@ -78,7 +78,7 @@ while True:
         print(f"Recibido raw:\n{data}")
         parsed_data = parse_data(data)
 
-        # print(f"Recibido:\n{parsed_data}")
+        print(f"Recibido:\n{parsed_data}")
         # conn.send(data)
 
     conn.close()
