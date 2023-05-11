@@ -31,7 +31,6 @@ def parse_data(packet):
     # if dataD is not None:
     #    dataSave(header, dataD)
 
-    print(dataD)
     return None if dataD is None else {**header, **dataD}
 
 
@@ -77,14 +76,6 @@ def data_dict(protocol: int, data):
         print("Error: protocol doesnt exist")
         return None
 
-    def protFunc(protocol, keys):
-        def p(data):
-            unp = prot_unpack(protocol, data)
-            return {key: val for (key, val) in zip(keys, unp)}
-
-        return p
-
-    # p0 = ["OK"]
     p0 = ("Val: 1", "Batt_level", "Timestamp")
     p1 = (*p0, "Temp", "Press", "Hum", "Co")
     p2 = (*p1, "RMS")
@@ -93,7 +84,9 @@ def data_dict(protocol: int, data):
     p = (p0, p1, p2, p3, p4)
 
     try:
-        return protFunc(protocol, p[protocol])(data)
+        unp = prot_unpack(protocol, data)
+        keys = p[protocol]
+        return {key: val for (key, val) in zip(keys, unp)}
     except Exception:
         print("Data unpacking Error:", traceback.format_exc())
         return None
