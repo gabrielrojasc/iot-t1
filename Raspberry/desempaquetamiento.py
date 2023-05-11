@@ -31,6 +31,7 @@ def parse_data(packet):
     # if dataD is not None:
     #    dataSave(header, dataD)
 
+    print(dataD)
     return None if dataD is None else {**header, **dataD}
 
 
