@@ -35,7 +35,6 @@ char *header(char protocol, char transportLayer)
     unsigned short dataLen = dataLength(protocol);
     memcpy((void *)&(head[10]), (void *)&dataLen, 2);
     free(MACaddrs);
-    ESP_LOGI("PACKET", "Header: %s", head);
     return head;
 }
 
@@ -81,6 +80,9 @@ char *mensaje(char protocol, char transportLayer)
     memcpy((void *)&(mnsj[12]), (void *)data, dataLength(protocol));
     free(hdr);
     free(data);
+
+    ESP_LOGI("mensaje", "mensaje: %s", mnsj);
+
     return mnsj;
 }
 
@@ -117,8 +119,6 @@ char *dataprotocol1()
 
     float co = THPC_sensor_co();
     memcpy((void *)&(msg[12]), (void *)&co, 4);
-
-    ESP_LOGI("PACKET", "Data: %s", msg);
 
     return msg;
 }
@@ -179,12 +179,15 @@ char *dataprotocol4()
 
     int16_t *acc_x = acc_sensor_acc_x();
     memcpy((void *)&(msg[16]), (void *)acc_x, 8000);
+    free(acc_x);
 
     int16_t *acc_y = acc_sensor_acc_y();
     memcpy((void *)&(msg[8016]), (void *)acc_y, 8000);
+    free(acc_y);
 
     int16_t *acc_z = acc_sensor_acc_z();
     memcpy((void *)&(msg[16016]), (void *)acc_z, 8000);
+    free(acc_z);
 
     return msg;
 }

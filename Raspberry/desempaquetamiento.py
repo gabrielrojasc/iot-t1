@@ -38,6 +38,7 @@ def prot_unpack(protocol: int, data):
     protocol_unpack = ["<2Bl", "<2BlBfBf", "<2BlBfBff", "<2BlBfB8f", "<2BlBfBf6000f"]
     array = unpack(protocol_unpack[protocol], data)
     if protocol == 4:
+        print(array)
         array = (
             *array[:16],
             array[16 : 16 + 2000],
@@ -60,7 +61,7 @@ def header_dict(data):
         protocol,
         leng_msg,
     ) = unpack("<2s6BccH", data)
-    MAC = ".".join([hex(x)[2:] for x in [M1, M2, M3, M4, M5, M6]])
+    MAC = ":".join([hex(x)[2:] for x in [M1, M2, M3, M4, M5, M6]])
     return {
         "id_device": id_device,
         "MAC": MAC,
