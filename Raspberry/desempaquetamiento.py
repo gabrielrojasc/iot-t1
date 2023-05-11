@@ -28,7 +28,9 @@ def parse_data(packet):
     data = packet[12:]
     header = header_dict(header)
     dataD = data_dict(header["protocol"], data)
-    print([len(d) for d in dataD.values()])
+    print(
+        [len(d) for d in dataD.values() if isinstance(d, list) or isinstance(d, tuple)]
+    )
     # if dataD is not None:
     #    dataSave(header, dataD)
 
