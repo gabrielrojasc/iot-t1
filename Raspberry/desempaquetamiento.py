@@ -31,8 +31,8 @@ def parse_data(packet):
     print(
         [len(d) for d in dataD.values() if isinstance(d, list) or isinstance(d, tuple)]
     )
-    # if dataD is not None:
-    #    dataSave(header, dataD)
+    if dataD is not None:
+        dataSave(header, dataD)
 
     return None if dataD is None else {**header, **dataD}
 

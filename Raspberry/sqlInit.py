@@ -1,5 +1,5 @@
 createDatos = '''CREATE TABLE Datos (
-    id_datos INTEGER PRIMARY KEY,
+    id_datos INTEGER PRIMARY KEY AUTOINCREMENT,
 
     id_device CHAR(2) NOT NULL
     MAC BINARY(6) NOT NULL,
@@ -25,7 +25,7 @@ createDatos = '''CREATE TABLE Datos (
 );'''
 
 createLogs = '''CREATE TABLE Logs (
-    id_log INTEGER PRIMARY KEY,
+    id_log INTEGER PRIMARY KEY AUTOINCREMENT,
     datos INTEGER NOT NULL,
 
     id_device CHAR(2) NOT NULL
@@ -38,14 +38,14 @@ createLogs = '''CREATE TABLE Logs (
 );'''
 
 createConfiguracion = '''CREATE TABLE Configuracion (
-    id_conf INTEGER PRIMARY KEY,
+    id_conf INTEGER PRIMARY KEY AUTOINCREMENT,
     protocol TINYINT NOT NULL,
     transport_layer TINYINT NOT NULL
 
 );'''
 
 createLoss = '''CREATE TABLE Loss (
-    id_loss INTEGER PRIMARY KEY,
+    id_loss INTEGER PRIMARY KEY AUTOINCREMENT,
     datos INTEGER NOT NULL,
 
     Timedelay DATETIME DEFAULT CURRENT_TIMESTAMP,
