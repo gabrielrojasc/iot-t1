@@ -1,6 +1,5 @@
 from struct import unpack, pack
 import traceback
-from DatabaseWork import *
 
 # Documentación struct unpack,pack :https://docs.python.org/3/library/struct.html#
 """
