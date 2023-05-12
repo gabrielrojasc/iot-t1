@@ -17,7 +17,7 @@
 #define BUTTON_PIN 21
 
 extern void tcp_client(void);
-extern void udp_client(void *pvParameters);
+extern void udp_client_task(void *pvParameters);
 
 void app_main(void)
 {
@@ -44,5 +44,5 @@ void app_main(void)
         // tcp_client();
         // ESP_LOGI("main", "Reconnecting");
     }
-    xTaskCreate(udp_client, "udp_client", 4096, NULL, 5, NULL);
+    xTaskCreate(udp_client_task, "udp_client_task", 4096, NULL, 5, NULL);
 }

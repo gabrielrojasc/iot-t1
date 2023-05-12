@@ -34,7 +34,7 @@ static const char *payload = "Message from ESP32 ";
 
 extern int UDP_send_frag(int sock, struct sockaddr_in dest_addr, char frag1, char frag2);
 
-static void udp_client(void *pvParameters)
+void udp_client(void *pvParameters)
 {
     char rx_buffer[128];
     char host_ip[] = HOST_IP_ADDR;
