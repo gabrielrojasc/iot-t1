@@ -34,6 +34,48 @@ static const char *payload = "Message from ESP32 ";
 
 extern int UDP_send_frag(int sock, struct sockaddr_in dest_addr, char frag1, char frag2);
 
+int create__UDP_socket_with_timeout()
+{
+    struct sockaddr_in dest_addr;
+    dest_addr.sin_addr.s_addr = inet_addr(HOST_IP_ADDR);
+    dest_addr.sin_family = AF_INET;
+    dest_addr.sin_port = htons(PORT);
+
+    int addr_family = AF_INET;
+    int ip_protocol = IPPROTO_IP;
+
+    int sock = socket(addr_family, SOCK_DGRAM, ip_protocol);
+    if (sock < 0)
+    {
+        ESP_LOGE(TAG, "Unable to create socket: errno %d", errno);
+        return -1;
+    }
+
+    // Set timeout
+    struct timeval timeout;
+    timeout.tv_sec = 10;
+    timeout.tv_usec = 0;
+    setsockopt(sock, SOL_SOCKET, SO_RCVTIMEO, &timeout, sizeof timeout);
+
+    ESP_LOGI(TAG, "Socket created, connecting to %s:%d", HOST_IP_ADDR, PORT);
+    int err = connect(sock, (struct sockaddr *)&dest_addr, sizeof(dest_addr));
+    if (err != 0)
+    {
+        ESP_LOGE(TAG, "Socket unable to connect: errno %d", errno);
+        return -1;
+    }
+    ESP_LOGI(TAG, "Successfully connected");
+
+    return sock;
+}
+
+void close_UDP_socket(int sock)
+{
+    ESP_LOGI(TAG, "Shutting down socket");
+    shutdown(sock, 0);
+    close(sock);
+}
+
 void udp_client_task(void *pvParameters)
 {
     char rx_buffer[128];

@@ -9,6 +9,8 @@
     "__undef_macros": "c",
     "algorithm": "c",
     "new": "c",
-    "complex": "c"
-  }
+    "complex": "c",
+    "esp_netif.h": "c"
+  },
+  "C_Cpp.errorSquiggles": "enabled"
 }
