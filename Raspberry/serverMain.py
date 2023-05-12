@@ -42,9 +42,8 @@ def UDP_frag_recv(s):
 
 
 # TCP SOCKET
-# "192.168.5.177"  # Standard loopback interface address (localhost)
 HOST = "0.0.0.0"
-PORT = 8000  # Port to listen on (non-privileged ports are > 1023)
+PORT = 8000
 
 
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)  # internet  # TCP
@@ -80,7 +79,6 @@ while True:
 
         print(f"Recibido:\n{parsed_data}")
         transport_layer = parsed_data.get("transport_layer")
-        # conn.send(data)
 
     conn.close()
     print("Desconectado")

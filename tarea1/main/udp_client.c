@@ -34,7 +34,7 @@ static const char *payload = "Message from ESP32 ";
 
 extern int UDP_send_frag(int sock, struct sockaddr_in dest_addr, char frag1, char frag2);
 
-void udp_client(void *pvParameters)
+void udp_client_task(void *pvParameters)
 {
     char rx_buffer[128];
     char host_ip[] = HOST_IP_ADDR;
@@ -98,12 +98,6 @@ void udp_client(void *pvParameters)
             //         break;
             //     }
             // }
-            ESP_LOGI(TAG, "%s", rx_buffer);
-            if (strncmp(rx_buffer, "OK: ", 4) == 0)
-            {
-                ESP_LOGI(TAG, "Received expected message, reconnecting");
-                break;
-            }
 
             vTaskDelay(2000 / portTICK_PERIOD_MS);
         }

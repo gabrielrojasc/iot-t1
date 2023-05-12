@@ -41,8 +41,8 @@ void app_main(void)
         // buttonStatePrev = buttonStateNow;
         // buttonStateNow = gpio_get_level(BUTTON_PIN);
         // ESP_LOGI("main", "Button state: %d", buttonStateNow);
-        // tcp_client();
         // ESP_LOGI("main", "Reconnecting");
+        tcp_client();
+        udp_client_task(NULL);
     }
-    xTaskCreate(udp_client_task, "udp_client_task", 4096, NULL, 5, NULL);
 }
