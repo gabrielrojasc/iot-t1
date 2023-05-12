@@ -37,7 +37,7 @@ def UDP_frag_recv(s):
             raise
         except Exception:
             raise
-        # s.sendto(b'\1', addr)
+        s.sendto(b'\1', addr)
     return (doc, addr)
 
 
