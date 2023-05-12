@@ -17,6 +17,7 @@
 #define BUTTON_PIN 21
 
 extern void tcp_client(void);
+extern void udp_client(void *pvParameters);
 
 void app_main(void)
 {
@@ -35,12 +36,13 @@ void app_main(void)
     int buttonStatePrev = 1;
     int buttonStateNow = 1;
 
-    while (true)
+    while (false)
     {
         // buttonStatePrev = buttonStateNow;
         // buttonStateNow = gpio_get_level(BUTTON_PIN);
         // ESP_LOGI("main", "Button state: %d", buttonStateNow);
-        tcp_client();
+        // tcp_client();
         // ESP_LOGI("main", "Reconnecting");
     }
+    xTaskCreate(udp_client, "udp_client", 4096, NULL, 5, NULL);
 }

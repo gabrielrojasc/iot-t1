@@ -8,7 +8,6 @@
 
 #include "addr_from_stdin.h"
 
-
 /*
 - Wifi_connect(Name_SSID, PASS), función para realizar la conexión wifi, esto se realiza dentro del ejemplo.
 - TCP_connect/UDP_connect(IPV4, PORT), realiza la conexión con un socket TCP/UDP.
@@ -124,10 +123,9 @@ int UDP_send_frag(int sock, struct sockaddr_in dest_addr, char status, char prot
         }
     }
     // el último mensaje es solo un \0 para avisarle al server que terminamos
-    int err = send(sock, "\0", 1, 0);
+    int err = sendto(sock, "\0", 1, 0, (struct sockaddr *)&dest_addr, sizeof(dest_addr));
 
     free(payload);
 
     return err;
 }
-

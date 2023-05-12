@@ -37,7 +37,7 @@ def UDP_frag_recv(s):
             raise
         except Exception:
             raise
-        s.sendto(b'\1', addr)
+        s.sendto(b"\1", addr)
     return (doc, addr)
 
 
@@ -79,6 +79,7 @@ while True:
         parsed_data = parse_data(data)
 
         print(f"Recibido:\n{parsed_data}")
+        transport_layer = parsed_data.get("transport_layer")
         # conn.send(data)
 
     conn.close()
