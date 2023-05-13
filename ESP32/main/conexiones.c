@@ -68,6 +68,7 @@ int create_UDP_socket()
   struct timeval timeout;
   timeout.tv_sec = 10;
   timeout.tv_usec = 0;
+
   setsockopt(sock, SOL_SOCKET, SO_RCVTIMEO, &timeout, sizeof timeout);
 
   ESP_LOGI(TAG, "Socket created, connecting to %s:%d", HOST_IP_ADDR, PORT_UDP);

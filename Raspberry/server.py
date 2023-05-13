@@ -1,6 +1,7 @@
 import socket
 import sys
 import select
+from struct import pack
 
 from unpacking import parse_data
 from db import get_configs
@@ -45,8 +46,9 @@ def UDP_frag_recv(s):
 
 
 def send_config(socket, config):
-    socket.sendall(f"{config[0]}{config[1]}".encode("utf-8"))
-    print(f"Enviado: {config[0]}{config[1]}")
+    packet = pack("<2B", socket, config)
+    socket.sendall(packet)
+    print(f"Enviado: {packet}")
 
 
 # TCP SOCKET

@@ -43,10 +43,9 @@ void app_main(void)
 
   int sock_TCP = create_TCP_socket();
   char *config = fetch_config(sock_TCP);
+  ESP_LOGI("main", "config: %s", config);
   protocol = config[0];
   transportLayer = config[1];
-  ESP_LOGI("main", "protocol: %c", config[0]);
-  ESP_LOGI("main", "transportLayer: %c", config[1]);
   free(config);
 
   while (1)
