@@ -38,7 +38,7 @@ def UDP_frag_recv(s):
             else:
                 doc += data
         except TimeoutError:
-            raise
+            break
         except Exception:
             raise
         s.sendto(b"\1", addr)
