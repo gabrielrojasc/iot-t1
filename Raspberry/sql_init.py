@@ -23,7 +23,6 @@ createDatos = """CREATE TABLE Datos (
     Frec_y FLOAT,
     Amp_z FLOAT,
     Frec_z FLOAT
-
 );"""
 
 createLogs = """CREATE TABLE Logs (
@@ -36,14 +35,12 @@ createLogs = """CREATE TABLE Logs (
     Timestamp DATETIME DEFAULT CURRENT_TIMESTAMP,
 
     FOREIGN KEY(datos) REFERENCES Datos(id_datos)
-
 );"""
 
 createConfiguracion = """CREATE TABLE Configuracion (
     id_conf INTEGER PRIMARY KEY AUTOINCREMENT,
     protocol TINYINT NOT NULL,
     transport_layer TINYINT NOT NULL
-
 );"""
 
 createLoss = """CREATE TABLE Loss (
@@ -54,16 +51,24 @@ createLoss = """CREATE TABLE Loss (
     Packet_loss INTEGER,
 
     FOREIGN KEY(datos) REFERENCES Datos(id_datos)
-
 );"""
 
 
+def create_config():
+    for protocol in range(5):
+        for transport_layer in range(2):
+            cur.execute(
+                "INSERT INTO Configuracion (protocol, transport_layer) VALUES (?, ?);",
+                (protocol, transport_layer),
+            )
+
+
+# inicializa la BDD
 conn = sql.connect("DB.sqlite")
 cur = conn.cursor()
 cur.execute(createDatos)
 cur.execute(createLogs)
 cur.execute(createConfiguracion)
 cur.execute(createLoss)
+create_config()
 conn.close()
-
-# inicializa la BDD
