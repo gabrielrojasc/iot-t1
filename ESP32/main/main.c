@@ -58,7 +58,7 @@ void app_main(void)
       if (err < 0)
       {
         ESP_LOGE("main", "Error occurred during sending: errno %d", err);
-        close(sock_TCP);
+        // close_socket(sock_TCP);
         int sock_TCP = create_TCP_socket();
         break;
       }
@@ -74,7 +74,7 @@ void app_main(void)
       if (err < 0)
       {
         ESP_LOGE("main", "Error occurred during sending: errno %d", err);
-        close(sock_UDP);
+        // close_socket(sock_UDP);
         break;
       }
 
