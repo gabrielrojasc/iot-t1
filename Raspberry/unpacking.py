@@ -27,13 +27,14 @@ def parse_data(packet):
     data = packet[12:]
     header = header_dict(header)
     dataD = data_dict(header["protocol"], data)
-    print(
-        [len(d) for d in dataD.values() if isinstance(d, list) or isinstance(d, tuple)]
-    )
+    if dataD is None:
+        print("Error: dataD is None")
+        return None
+
     # if dataD is not None:
     #    data_save(header, dataD)
 
-    return None if dataD is None else {**header, **dataD}
+    return {**header, **dataD}
 
 
 def prot_unpack(protocol: int, data):

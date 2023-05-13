@@ -77,9 +77,9 @@ transport_layer = 1
 buffer = 1024
 
 conn, addr = s.accept()
+print(f"Conectado por alguien ({addr[0]}) desde el puerto {addr[1]}")
 
 for protocol, transport_layer in get_configs():
-    print(f"Conectado por alguien ({addr[0]}) desde el puerto {addr[1]}")
     send_config(conn, protocol, transport_layer)
     data = b""
     for _ in range(1):
