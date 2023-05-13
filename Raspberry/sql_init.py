@@ -29,7 +29,7 @@ createLogs = """CREATE TABLE Logs (
     id_log INTEGER PRIMARY KEY AUTOINCREMENT,
     datos INTEGER NOT NULL,
 
-    id_device CHAR(2) NOT NULL
+    id_device CHAR(2) NOT NULL,
     transport_layer TINYINT NOT NULL,
     protocol TINYINT NOT NULL,
     Timestamp DATETIME DEFAULT CURRENT_TIMESTAMP,
