@@ -24,7 +24,10 @@ createDatos = """CREATE TABLE Datos (
     Amp_y FLOAT,
     Frec_y FLOAT,
     Amp_z FLOAT,
-    Frec_z FLOAT
+    Frec_z FLOAT,
+    Acc_x TEXT,
+    Acc_y TEXT,
+    Acc_z TEXT
 );"""
 
 createLogs = """CREATE TABLE Logs (

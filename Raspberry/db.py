@@ -1,5 +1,6 @@
 import sqlite3 as sql
 import datetime
+import json
 
 # Documentación https://docs.python.org/3/library/sqlite3.html
 
@@ -69,6 +70,17 @@ def data_save(header, data):
                     data["Frec_y"],
                     data["Amp_z"],
                     data["Frec_z"],
+                    row_id,
+                ),
+            )
+
+        if header["protocol"] in [4]:
+            cur.execute(
+                """UPDATE Datos SET Acc_x = ?, Acc_y = ?, Acc_z = ? WHERE id_datos = ?""",
+                (
+                    json.dumps(data["Acc_x"]),
+                    json.dumps(data["Acc_y"]),
+                    json.dumps(data["Acc_z"]),
                     row_id,
                 ),
             )
