@@ -41,51 +41,50 @@ void app_main(void)
    */
   ESP_ERROR_CHECK(example_connect());
 
+  int sock_UDP = create_UDP_socket();
   int sock_TCP = create_TCP_socket();
-  char *config = fetch_config(sock_TCP);
-  ESP_LOGI("main", "config: %s", config);
-  protocol = config[0];
-  transportLayer = config[1];
-  free(config);
-
   while (1)
   {
+    char *config = fetch_config(sock_TCP);
+    ESP_LOGI("main", "config: %s", config);
+    protocol = config[0];
+    transportLayer = config[1];
+    free(config);
 
-    if (transportLayer == '1')
+    while (1)
     {
-      int err = TCP_send_frag(sock_TCP, protocol);
 
-      if (err < 0)
+      if (transportLayer == '1')
       {
-        ESP_LOGE("main", "Error occurred during sending: errno %d", err);
-        // close_socket(sock_TCP);
-        int sock_TCP = create_TCP_socket();
-        break;
+        int err = TCP_send_frag(sock_TCP, protocol);
+
+        if (err < 0)
+        {
+          ESP_LOGE("main", "Error occurred during sending: errno %d", err);
+          // close_socket(sock_TCP);
+          int sock_TCP = create_TCP_socket();
+          break;
+        }
+
+        ESP_LOGI("TCP", "Message sent");
+        sleep(60);
       }
-
-      ESP_LOGI("TCP", "Message sent");
-      sleep(60);
-    }
-    else
-    {
-      int sock_UDP = create_UDP_socket();
-      int err = UDP_send_frag(sock_UDP, protocol);
-
-      if (err < 0)
+      else
       {
-        ESP_LOGE("main", "Error occurred during sending: errno %d", err);
-        // close_socket(sock_UDP);
-        break;
-      }
+        int err = UDP_send_frag(sock_UDP, protocol);
 
-      ESP_LOGI("UDP", "Message sent");
-      vTaskDelay(2000 / portTICK_PERIOD_MS);
+        if (err < 0)
+        {
+          ESP_LOGE("main", "Error occurred during sending: errno %d", err);
+          // close_socket(sock_UDP);
+          break;
+        }
+
+        ESP_LOGI("UDP", "Message sent");
+        vTaskDelay(2000 / portTICK_PERIOD_MS);
+      }
     }
   }
-  config = fetch_config(sock_TCP);
-  protocol = config[0];
-  transportLayer = config[1];
-  free(config);
 }
 
 char *fetch_config(int sock)

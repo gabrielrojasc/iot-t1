@@ -17,9 +17,9 @@ def TCP_frag_recv(conn):
                 break
             else:
                 doc += data
-        except TimeoutError:
+        except socket.timeout:
             conn.send(b"\0")
-            raise
+            break
         except Exception:
             conn.send(b"\0")
             raise
@@ -37,7 +37,7 @@ def UDP_frag_recv(s):
                 break
             else:
                 doc += data
-        except TimeoutError:
+        except socket.timeout:
             break
         except Exception:
             raise
