@@ -8,6 +8,7 @@ def get_configs():
     with sql.connect("DB.sqlite") as con:
         cur = con.cursor()
         cur.execute("SELECT protocol, transport_layer FROM Configuracion")
+        cur.commit()
         rows = cur.fetchall()
         return rows
 

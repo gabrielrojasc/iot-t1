@@ -54,9 +54,12 @@ createLoss = """CREATE TABLE Loss (
 );"""
 
 
-def create_config():
+def create_config(cur):
     for protocol in range(5):
         for transport_layer in range(2):
+            print(
+                f"Creando configuración: protocolo {protocol}, capa de transporte {transport_layer}"
+            )
             cur.execute(
                 "INSERT INTO Configuracion (protocol, transport_layer) VALUES (?, ?);",
                 (protocol, transport_layer),
@@ -66,9 +69,12 @@ def create_config():
 # inicializa la BDD
 conn = sql.connect("DB.sqlite")
 cur = conn.cursor()
+print("Creando tablas...")
 cur.execute(createDatos)
 cur.execute(createLogs)
 cur.execute(createConfiguracion)
 cur.execute(createLoss)
-create_config()
+print("Creando configuraciones...")
+create_config(cur)
+conn.commit()
 conn.close()
