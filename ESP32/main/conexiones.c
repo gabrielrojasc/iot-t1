@@ -171,6 +171,7 @@ int UDP_send_frag(int sock, char status, char protocolo)
     if (err < 0)
     {
       ESP_LOGE(TAG, "Error occurred during sending: errno %d", errno);
+      break;
     }
 
     // wait for confirmation

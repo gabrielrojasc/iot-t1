@@ -38,39 +38,15 @@ void app_main(void)
    */
   ESP_ERROR_CHECK(example_connect());
 
-  gpio_set_direction(BUTTON_PIN, GPIO_MODE_INPUT);
-  gpio_set_pull_mode(BUTTON_PIN, GPIO_PULLUP_ONLY);
-  int buttonStatePrev = 1;
-  int buttonStateNow = 1;
-
-  int sock_TCP = create_TCP_socket();
-  int sock_UDP = create_UDP_socket();
-
-  char protocol = '0';
-  int protocolInt = 0;
-
   while (1)
   {
-    // cycle through protocols
-    protocolInt++;
-    protocolInt %= 5;
-    protocol = protocolInt + '0';
+    char *config = fetch_config();
+    protocol = config[0];
+    transportLayer = config[1];
 
-    // change transport layer when button is pressed
-    buttonStatePrev = buttonStateNow;
-    buttonStateNow = gpio_get_level(BUTTON_PIN);
-    if (!buttonStateNow && buttonStatePrev)
-    {
-      change_transport_layer();
-    }
-    switch (transportLayer)
-    {
-    case '0':
-      ESP_LOGI("main", "UDP");
-      break;
-    }
     if (transportLayer == '1')
     {
+      int sock_TCP = create_TCP_socket();
       int err = TCP_send_frag(sock_TCP, transportLayer, protocol);
 
       if (err < 0)
@@ -83,6 +59,7 @@ void app_main(void)
     }
     else
     {
+      int sock_UDP = create_UDP_socket();
       int err = UDP_send_frag(sock_UDP, transportLayer, protocol);
 
       if (err < 0)
@@ -94,21 +71,5 @@ void app_main(void)
       ESP_LOGI("UDP", "Message sent");
     }
     vTaskDelay(2000 / portTICK_PERIOD_MS);
-  }
-}
-
-void change_transport_layer()
-{
-  switch (transportLayer)
-  {
-  case '0':
-    transportLayer = '1';
-    break;
-  case '1':
-    transportLayer = '0';
-    break;
-  default:
-    transportLayer = '1';
-    break;
   }
 }

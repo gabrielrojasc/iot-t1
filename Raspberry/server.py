@@ -1,6 +1,9 @@
 import socket
+import sys
+import select
 
 from unpacking import parse_data
+from db import get_configs
 
 
 def TCP_frag_recv(conn):
@@ -41,6 +44,11 @@ def UDP_frag_recv(s):
     return (doc, addr)
 
 
+def send_config(socket, config):
+    socket.sendall(f"{config[0]}{config[1]}".encode("utf-8"))
+    print(f"Enviado: {config[0]} {config[1]}")
+
+
 # TCP SOCKET
 HOST = "0.0.0.0"
 PORT = 8000
@@ -61,24 +69,38 @@ sUDP.bind((HOST, UDP_PORT))
 transport_layer = 1
 buffer = 1024
 
-while True:
-    conn, addr = s.accept()
-    print(f"Conectado por alguien ({addr[0]}) desde el puerto {addr[1]}")
-    data = b""
+for protocol, transport_layer in get_configs():
     while True:
-        try:
-            if transport_layer == 1:  # TCP
-                data = TCP_frag_recv(conn)
-            else:  # UDP
-                data = UDP_frag_recv(sUDP)
-        except ConnectionResetError:
-            break
+        conn, addr = s.accept()
+        print(f"Conectado por alguien ({addr[0]}) desde el puerto {addr[1]}")
+        send_config(conn, (protocol, transport_layer))
+        data = b""
+        while True:
+            if select.select([sys.stdin], [], [], 0) == ([sys.stdin], [], []):
+                key = sys.stdin.read(1)
+                if key == "q":
+                    break
+                else:
+                    print(f"Key '{key}' pressed!")
 
-        print(f"Recibido raw:\n{data}")
-        parsed_data = parse_data(data)
+            try:
+                if transport_layer == 1:  # TCP
+                    data = TCP_frag_recv(conn)
+                else:  # UDP
+                    data = UDP_frag_recv(sUDP)
+            except ConnectionResetError:
+                break
 
-        print(f"Recibido:\n{parsed_data}")
-        transport_layer = parsed_data.get("transport_layer")
+            print(f"Recibido raw:\n{data}")
+            parsed_data = parse_data(data)
 
-    conn.close()
-    print("Desconectado")
+            print(f"Recibido:\n{parsed_data}")
+            transport_layer = parsed_data.get("transport_layer")
+
+        conn.close()
+        if transport_layer == 0:
+            sUDP.close()
+            sUDP = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)  # Internet  # UDP
+            sUDP.bind((HOST, UDP_PORT))
+
+        print("Desconectado")

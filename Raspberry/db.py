@@ -4,6 +4,14 @@ import datetime
 # Documentación https://docs.python.org/3/library/sqlite3.html
 
 
+def get_configs():
+    with sql.connect("DB.sqlite") as con:
+        cur = con.cursor()
+        cur.execute("SELECT protocol, transport_layer FROM Configuracion")
+        rows = cur.fetchall()
+        return rows
+
+
 def data_save(header, data):
     now = datetime.datetime.now()
 
@@ -19,16 +27,20 @@ def data_save(header, data):
 
         # Datos comunes para todos los protocolos
         cur.execute(
-            """insert into Datos (id_device, MAC, transport_layer, protocol, length, Val1, Batt_level, Timestamp) values (?, ?, ?, ?, ?, ?, ?, ?)""",
+            """
+            insert into Datos
+                (id_device, MAC, transport_layer, protocol, length, Val1, Batt_level, Timestamp)
+                values (?, ?, ?, ?, ?, ?, ?, ?)
+            """,
             (
                 header["id_device"],
                 header["MAC"],
                 header["transport_layer"],
                 header["protocol"],
                 header["length"],
-                header["protocol"],
                 data["Val: 1"],
                 data["Batt_level"],
+                data["Timestamp"],
                 now,
             ),
         )
