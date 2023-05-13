@@ -81,7 +81,7 @@ for protocol, transport_layer in get_configs():
     print(f"Conectado por alguien ({addr[0]}) desde el puerto {addr[1]}")
     send_config(conn, protocol, transport_layer)
     data = b""
-    while True:
+    for _ in range(10):
         if select.select([sys.stdin], [], [], 0) == ([sys.stdin], [], []):
             key = sys.stdin.read(1)
             if key == "n":
