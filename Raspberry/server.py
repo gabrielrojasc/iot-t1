@@ -76,12 +76,13 @@ sUDP = create_socket_UDP()
 transport_layer = 1
 buffer = 1024
 
+conn, addr = s.accept()
+
 for protocol, transport_layer in get_configs():
-    conn, addr = s.accept()
     print(f"Conectado por alguien ({addr[0]}) desde el puerto {addr[1]}")
     send_config(conn, protocol, transport_layer)
     data = b""
-    for _ in range(10):
+    for _ in range(1):
         if select.select([sys.stdin], [], [], 0) == ([sys.stdin], [], []):
             key = sys.stdin.read(1)
             if key == "n":
