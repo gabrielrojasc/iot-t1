@@ -45,8 +45,8 @@ def UDP_frag_recv(s):
     return (doc, addr)
 
 
-def send_config(socket, config):
-    packet = pack("<2B", socket, config)
+def send_config(socket, protocol, transport_layer):
+    packet = pack("<2B", protocol, transport_layer)
     socket.sendall(packet)
     print(f"Enviado: {packet}")
 
@@ -75,7 +75,7 @@ for protocol, transport_layer in get_configs():
     while True:
         conn, addr = s.accept()
         print(f"Conectado por alguien ({addr[0]}) desde el puerto {addr[1]}")
-        send_config(conn, (protocol, transport_layer))
+        send_config(conn, protocol, transport_layer)
         data = b""
         while True:
             # if select.select([sys.stdin], [], [], 0) == ([sys.stdin], [], []):
