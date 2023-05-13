@@ -69,9 +69,7 @@ void app_main(void)
     else
     {
       int sock_UDP = create_UDP_socket();
-      ESP_LOGE("UDP", "Message not sent");
       int err = UDP_send_frag(sock_UDP, protocol);
-      ESP_LOGE("UDP", "Message sent");
 
       if (err < 0)
       {
