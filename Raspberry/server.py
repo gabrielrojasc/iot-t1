@@ -54,7 +54,7 @@ def send_config(socket, protocol, transport_layer):
 def create_socket_UDP():
     sUDP = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)  # Internet  # UDP
     sUDP.bind((HOST, UDP_PORT))
-    sUDP.setdefaulttimeout(5)
+    sUDP.settimeout(5)
     return sUDP
 
 
