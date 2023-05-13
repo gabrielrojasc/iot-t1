@@ -3,7 +3,7 @@ import sqlite3 as sql
 createDatos = """CREATE TABLE Datos (
     id_datos INTEGER PRIMARY KEY AUTOINCREMENT,
 
-    id_device CHAR(2) NOT NULL
+    id_device CHAR(2) NOT NULL,
     MAC BINARY(6) NOT NULL,
     transport_layer TINYINT NOT NULL,
     protocol TINYINT NOT NULL,

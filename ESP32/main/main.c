@@ -10,6 +10,8 @@
 #include "esp_log.h"
 
 #include <stdio.h>
+#include <sys/socket.h>
+#include <stdlib.h>
 #include <unistd.h>
 
 #include "driver/gpio.h"
@@ -19,12 +21,13 @@
 extern int create_TCP_socket();
 extern int create_UDP_socket();
 extern void close_socket(int sock);
-extern int TCP_send_frag(int sock, char status, char protocolo);
-extern int UDP_send_frag(int sock, char status, char protocolo);
+extern int TCP_send_frag(int sock, char protocolo);
+extern int UDP_send_frag(int sock, char protocolo);
 
 char transportLayer = '1'; // 1 = TCP, 0 = UDP
+char protocol = '0';
 
-void change_transport_layer();
+char *fetch_config(int socket);
 
 void app_main(void)
 {
@@ -38,20 +41,23 @@ void app_main(void)
    */
   ESP_ERROR_CHECK(example_connect());
 
+  int sock_TCP = create_TCP_socket();
+
   while (1)
   {
-    char *config = fetch_config();
+    char *config = fetch_config(sock_TCP);
     protocol = config[0];
     transportLayer = config[1];
+    free(config);
 
     if (transportLayer == '1')
     {
-      int sock_TCP = create_TCP_socket();
-      int err = TCP_send_frag(sock_TCP, transportLayer, protocol);
+      int err = TCP_send_frag(sock_TCP, protocol);
 
       if (err < 0)
       {
         ESP_LOGE("main", "Error occurred during sending: errno %d", err);
+        int sock_TCP = create_TCP_socket();
         break;
       }
 
@@ -60,7 +66,7 @@ void app_main(void)
     else
     {
       int sock_UDP = create_UDP_socket();
-      int err = UDP_send_frag(sock_UDP, transportLayer, protocol);
+      int err = UDP_send_frag(sock_UDP, protocol);
 
       if (err < 0)
       {
@@ -72,4 +78,13 @@ void app_main(void)
     }
     vTaskDelay(2000 / portTICK_PERIOD_MS);
   }
+}
+
+char *fetch_config(int sock)
+{
+  char *config = malloc(1024 * sizeof(char));
+  int len = recv(sock, config, sizeof(config) - 1, 0);
+  config[0] = protocol;
+  config[1] = transportLayer;
+  return config;
 }

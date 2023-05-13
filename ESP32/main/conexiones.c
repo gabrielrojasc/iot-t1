@@ -89,9 +89,10 @@ void close_socket(int sock)
   close(sock);
 }
 
-int TCP_send_frag(int sock, char status, char protocolo)
+int TCP_send_frag(int sock, char protocolo)
 {
   // Parte el mensaje (payload) en trozos de 1000 btyes y los manda por separado, esperando un OK con cada trozo
+  char status = '1';
   printf("Sending!\n");
   char *payload = mensaje(protocolo, status);
   int payloadLen = messageLength(protocolo);
@@ -143,8 +144,9 @@ int TCP_send_frag(int sock, char status, char protocolo)
   return err;
 }
 
-int UDP_send_frag(int sock, char status, char protocolo)
+int UDP_send_frag(int sock, char protocolo)
 {
+  char status = '0';
   struct sockaddr_in dest_addr;
   dest_addr.sin_addr.s_addr = inet_addr(HOST_IP_ADDR);
   dest_addr.sin_family = AF_INET;
