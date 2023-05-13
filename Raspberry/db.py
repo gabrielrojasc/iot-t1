@@ -85,12 +85,6 @@ def data_save(header, data):
             ),
         )
 
-        # Insert de Configuracion
-        cur.execute(
-            """insert into Configuracion (protocol, transport_layer) values (?, ?)""",
-            (header["protocol"], header["transport_layer"]),
-        )  # No sé realmente si así haya que trabajar con esta tabla
-
         # Insert de Loss
         if previous_timestamp is not None:
             delay = now - previous_timestamp

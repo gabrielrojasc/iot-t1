@@ -269,3 +269,5 @@ _deps
 build/
 sdkconfig
 sdkconfig.old
+
+*.sqlite3

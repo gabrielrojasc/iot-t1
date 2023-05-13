@@ -42,13 +42,15 @@ void app_main(void)
   ESP_ERROR_CHECK(example_connect());
 
   int sock_TCP = create_TCP_socket();
+  char *config = fetch_config(sock_TCP);
+  protocol = config[0];
+  transportLayer = config[1];
+  ESP_LOGI("main", "protocol: %c", config[0]);
+  ESP_LOGI("main", "transportLayer: %c", config[1]);
+  free(config);
 
   while (1)
   {
-    char *config = fetch_config(sock_TCP);
-    protocol = config[0];
-    transportLayer = config[1];
-    free(config);
 
     if (transportLayer == '1')
     {
@@ -66,7 +68,9 @@ void app_main(void)
     else
     {
       int sock_UDP = create_UDP_socket();
+      ESP_LOGE("UDP", "Message not sent");
       int err = UDP_send_frag(sock_UDP, protocol);
+      ESP_LOGE("UDP", "Message sent");
 
       if (err < 0)
       {
@@ -76,6 +80,10 @@ void app_main(void)
 
       ESP_LOGI("UDP", "Message sent");
     }
+    char *config = fetch_config(sock_TCP);
+    protocol = config[0];
+    transportLayer = config[1];
+    free(config);
     vTaskDelay(2000 / portTICK_PERIOD_MS);
   }
 }
