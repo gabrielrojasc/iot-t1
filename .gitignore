@@ -271,3 +271,4 @@ sdkconfig
 sdkconfig.old
 
 *.sqlite3
+*.sqlite

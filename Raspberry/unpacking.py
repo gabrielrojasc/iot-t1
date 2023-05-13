@@ -1,5 +1,6 @@
 from struct import unpack, pack
 import traceback
+from db import data_save
 
 # Documentación struct unpack,pack :https://docs.python.org/3/library/struct.html#
 """
@@ -31,8 +32,7 @@ def parse_data(packet):
         print("Error: dataD is None")
         return None
 
-    # if dataD is not None:
-    #    data_save(header, dataD)
+    data_save(header, dataD)
 
     return {**header, **dataD}
 

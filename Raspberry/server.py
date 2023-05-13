@@ -82,7 +82,7 @@ for protocol, transport_layer in get_configs():
     print(f"Conectado por alguien ({addr[0]}) desde el puerto {addr[1]}")
     send_config(conn, protocol, transport_layer)
     data = b""
-    for _ in range(1):
+    for _ in range(5):
         if select.select([sys.stdin], [], [], 0) == ([sys.stdin], [], []):
             key = sys.stdin.read(1)
             if key == "n":
@@ -104,11 +104,14 @@ for protocol, transport_layer in get_configs():
         print(f"Recibido raw:\n{data}")
         parsed_data = parse_data(data)
 
-        print(f"Recibido:\n{parsed_data}")
-        transport_layer = parsed_data.get("transport_layer")
+        if parse_data is not None:
+            print(f"Recibido:\n{parsed_data}")
+            transport_layer = parsed_data.get("transport_layer")
 
+    conn.sendall(b"\2")
     conn.close()
     if transport_layer == 0:
+        sUDP.sendall(b"\2")
         sUDP.close()
         sUDP = create_socket_UDP()
 

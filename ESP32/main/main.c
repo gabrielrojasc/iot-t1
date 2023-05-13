@@ -46,7 +46,6 @@ void app_main(void)
   while (1)
   {
     char *config = fetch_config(sock_TCP);
-    ESP_LOGI("main", "config: %s", config);
     protocol = config[0];
     transportLayer = config[1];
     free(config);
@@ -62,7 +61,7 @@ void app_main(void)
         {
           ESP_LOGE("main", "Error occurred during sending: errno %d", err);
           // close_socket(sock_TCP);
-          int sock_TCP = create_TCP_socket();
+          // int sock_TCP = create_TCP_socket();
           break;
         }
 
@@ -77,6 +76,7 @@ void app_main(void)
         {
           ESP_LOGE("main", "Error occurred during sending: errno %d", err);
           // close_socket(sock_UDP);
+          // int sock_UDP = create_UDP_socket();
           break;
         }
 

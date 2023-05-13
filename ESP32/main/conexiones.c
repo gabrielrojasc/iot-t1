@@ -16,7 +16,7 @@
 #define PORT_TCP 8000
 #define PORT_UDP 8001
 
-const char *TAG = "example";
+const char *TAG = "conexiones";
 
 int create_TCP_socket()
 {
