@@ -82,12 +82,12 @@ for protocol, transport_layer in get_configs():
     send_config(conn, protocol, transport_layer)
     data = b""
     while True:
-        # if select.select([sys.stdin], [], [], 0) == ([sys.stdin], [], []):
-        #     key = sys.stdin.read(1)
-        #     if key == "q":
-        #         break
-        #     else:
-        #         print(f"Key '{key}' pressed!")
+        if select.select([sys.stdin], [], [], 0) == ([sys.stdin], [], []):
+            key = sys.stdin.read(1)
+            if key == "n":
+                break
+            else:
+                print(f"Key '{key}' pressed!")
 
         try:
             if transport_layer == 1:  # TCP
@@ -96,6 +96,9 @@ for protocol, transport_layer in get_configs():
                 data, _ = UDP_frag_recv(sUDP)
         except ConnectionResetError:
             break
+
+        if data == b"":
+            continue
 
         print(f"Recibido raw:\n{data}")
         parsed_data = parse_data(data)
