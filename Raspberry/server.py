@@ -46,7 +46,7 @@ def UDP_frag_recv(s):
 
 
 def send_config(socket, protocol, transport_layer):
-    packet = pack("<2B", protocol, transport_layer)
+    packet = pack("<2c", str(protocol), str(transport_layer))
     socket.sendall(packet)
     print(f"Enviado: {packet}")
 

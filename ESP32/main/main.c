@@ -91,7 +91,5 @@ char *fetch_config(int sock)
 {
   char *config = malloc(1024 * sizeof(char));
   int len = recv(sock, config, sizeof(config) - 1, 0);
-  config[0] = protocol;
-  config[1] = transportLayer;
   return config;
 }
