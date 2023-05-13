@@ -58,11 +58,13 @@ void app_main(void)
       if (err < 0)
       {
         ESP_LOGE("main", "Error occurred during sending: errno %d", err);
+        close(sock_TCP);
         int sock_TCP = create_TCP_socket();
         break;
       }
 
       ESP_LOGI("TCP", "Message sent");
+      sleep(60);
     }
     else
     {
@@ -74,17 +76,18 @@ void app_main(void)
       if (err < 0)
       {
         ESP_LOGE("main", "Error occurred during sending: errno %d", err);
+        close(sock_UDP);
         break;
       }
 
       ESP_LOGI("UDP", "Message sent");
+      vTaskDelay(2000 / portTICK_PERIOD_MS);
     }
-    char *config = fetch_config(sock_TCP);
-    protocol = config[0];
-    transportLayer = config[1];
-    free(config);
-    vTaskDelay(2000 / portTICK_PERIOD_MS);
   }
+  config = fetch_config(sock_TCP);
+  protocol = config[0];
+  transportLayer = config[1];
+  free(config);
 }
 
 char *fetch_config(int sock)
