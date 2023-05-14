@@ -102,4 +102,4 @@ def data_save(header, data, bytes_loss):
             ),
         )
 
-    save_packet_loss(row_id, data, bytes_loss)
+    save_packet_loss(data, bytes_loss)
