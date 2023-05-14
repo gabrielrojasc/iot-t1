@@ -12,7 +12,8 @@ def get_configs():
         rows = cur.fetchall()
         return rows
 
-def save_packet_loss(row_id, previous_timestamp,  bytes_loss):
+
+def save_packet_loss(row_id, previous_timestamp, bytes_loss):
     with sql.connect("DB.sqlite") as con:
         cur = con.cursor()
         now = datetime.datetime.now()
@@ -26,7 +27,6 @@ def save_packet_loss(row_id, previous_timestamp,  bytes_loss):
             """insert into Loss (datos, Timedelay, Packet_loss) values (?, ?, ?)""",
             (row_id, delay, bytes_loss),
         )  # Cambiar para guardar el Packet_loss
-
 
 
 def data_save(header, data, bytes_loss):
@@ -44,15 +44,14 @@ def data_save(header, data, bytes_loss):
 
         if header is None:
             save_packet_loss(None, previous_timestamp, bytes_loss)
-            return 
-
+            return
 
         # Datos comunes para todos los protocolos
         cur.execute(
             """
             insert into Datos
-                (id_device, MAC, transport_layer, protocol, length, Val1, Batt_level, Timestamp)
-                values (?, ?, ?, ?, ?, ?, ?, ?)
+                (id_device, MAC, transport_layer, protocol, length, Val1, Batt_level)
+                values (?, ?, ?, ?, ?, ?, ?)
             """,
             (
                 header["id_device"],
@@ -62,8 +61,6 @@ def data_save(header, data, bytes_loss):
                 header["length"],
                 data["Val: 1"],
                 data["Batt_level"],
-                data["Timestamp"],
-                now,
             ),
         )
 
@@ -108,15 +105,13 @@ def data_save(header, data, bytes_loss):
 
         # Insert de Logs
         cur.execute(
-            """insert into Logs (datos, id_device, transport_layer, protocol, Timestamp) values (?, ?, ?, ?, ?)""",
+            """insert into Logs (datos, id_device, transport_layer, protocol) values (?, ?, ?, ?)""",
             (
                 row_id,
                 header["id_device"],
                 header["transport_layer"],
                 header["protocol"],
-                now,
             ),
         )
 
         save_packet_loss(row_id, previous_timestamp, bytes_loss)
-

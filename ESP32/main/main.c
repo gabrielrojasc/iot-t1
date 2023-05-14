@@ -96,11 +96,15 @@ char *fetch_config(int sock)
 {
   char *config = malloc(1024 * sizeof(char));
   int len = recv(sock, config, sizeof(config) - 1, 0);
-  // Example usage
+  time_t t1 = time(NULL);
+  printf("Current Unix timestamp: %ld\n", (long)t1);
+
   time_t unix_timestamp = malloc(4 * sizeof(char));
   memcpy(unix_timestamp, &(config[2]), 4);
+  printf("rb Unix timestamp: %ld\n", (long)unix_timestamp);
   set_system_time((time_t)unix_timestamp);
-  time_t t = time(NULL);
-  printf("Current Unix timestamp: %ld\n", (long)t);
+
+  time_t t2 = time(NULL);
+  printf("Current Unix timestamp: %ld\n", (long)t2);
   return config;
 }
