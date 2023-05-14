@@ -50,7 +50,6 @@ createConfiguracion = """CREATE TABLE Configuracion (
 
 createLoss = """CREATE TABLE Loss (
     id_loss INTEGER PRIMARY KEY AUTOINCREMENT,
-    datos INTEGER NOT NULL,
 
     Timedelay DATETIME DEFAULT CURRENT_TIMESTAMP,
     Packet_loss INTEGER,
