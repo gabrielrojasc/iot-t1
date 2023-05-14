@@ -23,7 +23,7 @@ def save_packet_loss(data, bytes_loss):
             delay = timestamp - now
 
         cur.execute(
-            """insert into Loss (Timedelay, Packet_loss) values (?, ?, ?)""",
+            """insert into Loss (Timedelay, Packet_loss) values (?, ?)""",
             (delay, bytes_loss),
         )  # Cambiar para guardar el Packet_loss
 
