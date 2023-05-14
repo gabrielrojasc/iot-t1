@@ -98,7 +98,7 @@ for protocol, transport_layer in get_configs():
             if transport_layer == 1:  # TCP
                 data = TCP_frag_recv(conn)
             else:  # UDP
-                data, _ = UDP_frag_recv(sUDP)
+                data, udp_addr = UDP_frag_recv(sUDP)
         except ConnectionResetError:
             break
 
@@ -116,7 +116,7 @@ for protocol, transport_layer in get_configs():
     conn.sendall(b"\2")
     conn.close()
     if transport_layer == 0:
-        sUDP.sendall(b"\2")
+        sUDP.sendto(b"\2", udp_addr)
         sUDP.close()
         sUDP = create_socket_UDP()
 
