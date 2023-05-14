@@ -49,7 +49,7 @@ def UDP_frag_recv(s):
 def send_config(socket, protocol, transport_layer):
     current_time = time.time()
     packet = pack(
-        "<2ci", str(protocol).encode(), str(transport_layer).encode(), int(current_time)
+        "<2cq", str(protocol).encode(), str(transport_layer).encode(), int(current_time)
     )
     socket.sendall(packet)
     print(f"Enviado: {packet}")

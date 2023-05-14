@@ -99,9 +99,9 @@ char *fetch_config(int sock)
   time_t t1 = time(NULL);
   printf("Current Unix timestamp: %ld\n", (long)t1);
 
-  time_t unix_timestamp = malloc(4 * sizeof(char));
-  memcpy(unix_timestamp, &(config[2]), 4);
-  printf("rb Unix timestamp: %ld\n", (long)unix_timestamp);
+  time_t unix_timestamp = malloc(8 * sizeof(char));
+  memcpy(unix_timestamp, &(config[2]), 8);
+  printf("rb Unix timestamp: %ld\n", (long long)unix_timestamp);
   set_system_time((time_t)unix_timestamp);
 
   time_t t2 = time(NULL);

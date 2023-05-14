@@ -14,10 +14,8 @@ def get_configs():
 
 
 def save_packet_loss(row_id, previous_timestamp, bytes_loss):
+    now = datetime.datetime.now()
     with sql.connect("DB.sqlite") as con:
-        cur = con.cursor()
-        now = datetime.datetime.now()
-        # Insert de Loss
         if previous_timestamp is not None:
             delay = now - previous_timestamp
         else:
@@ -30,8 +28,6 @@ def save_packet_loss(row_id, previous_timestamp, bytes_loss):
 
 
 def data_save(header, data, bytes_loss):
-    now = datetime.datetime.now()
-
     with sql.connect("DB.sqlite") as con:
         cur = con.cursor()
 
@@ -114,4 +110,4 @@ def data_save(header, data, bytes_loss):
             ),
         )
 
-        save_packet_loss(row_id, previous_timestamp, bytes_loss)
+    save_packet_loss(row_id, previous_timestamp, bytes_loss)
