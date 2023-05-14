@@ -16,6 +16,9 @@ Usamos struct para pasar de un array de bytes a una lista de numeros/strings. (h
 
 """
 
+# Data Expected Length
+DATA_EXPECTED_LEN = (6, 16, 20, 44, 24016)
+
 
 def response(change: bool = False, status: int = 255, protocol: int = 255):
     OK = 1
@@ -23,16 +26,25 @@ def response(change: bool = False, status: int = 255, protocol: int = 255):
     return pack("<BBBB", OK, CHANGE, status, protocol)
 
 
-def parse_data(packet):
+def parse_data(packet, expected_protocol):
     header = packet[:12]
     data = packet[12:]
     header = header_dict(header)
-    dataD = data_dict(header["protocol"], data)
+    dataD = None
+    protocol = expected_protocol
+    if header is not None:
+        protocol = header["protocol"]
+        dataD = data_dict(protocol, data)
+    bytes_loss = len(packet) - (12 + DATA_EXPECTED_LEN[protocol])
+
+    data_save(header, dataD, bytes_loss)
+
     if dataD is None:
         print("Error: dataD is None")
         return None
-
-    data_save(header, dataD)
+    elif header is None:
+        print("Error: Header is None")
+        return None
 
     return {**header, **dataD}
 
@@ -53,18 +65,21 @@ def prot_unpack(protocol: int, data):
 
 
 def header_dict(data):
-    (
-        id_device,
-        M1,
-        M2,
-        M3,
-        M4,
-        M5,
-        M6,
-        transport_layer,
-        protocol,
-        leng_msg,
-    ) = unpack("<2s6BccH", data)
+    try:
+        (
+            id_device,
+            M1,
+            M2,
+            M3,
+            M4,
+            M5,
+            M6,
+            transport_layer,
+            protocol,
+            leng_msg,
+        ) = unpack("<2s6BccH", data)
+    except:
+        return None
     MAC = ":".join([hex(x)[2:] for x in [M1, M2, M3, M4, M5, M6]])
     return {
         "id_device": id_device,
