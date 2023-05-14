@@ -52,7 +52,7 @@ createLoss = """CREATE TABLE Loss (
     id_loss INTEGER PRIMARY KEY AUTOINCREMENT,
 
     Timedelay DATETIME DEFAULT CURRENT_TIMESTAMP,
-    Packet_loss INTEGER,
+    Packet_loss INTEGER
 );"""
 
 
