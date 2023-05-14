@@ -1,4 +1,5 @@
 import socket
+import time
 import sys
 import select
 from struct import pack
@@ -46,7 +47,10 @@ def UDP_frag_recv(s):
 
 
 def send_config(socket, protocol, transport_layer):
-    packet = pack("<2c", str(protocol).encode(), str(transport_layer).encode())
+    current_time = time.time()
+    packet = pack(
+        "<2cI", str(protocol).encode(), str(transport_layer).encode(), int(current_time)
+    )
     socket.sendall(packet)
     print(f"Enviado: {packet}")
 
