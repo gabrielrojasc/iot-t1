@@ -103,7 +103,7 @@ for protocol, transport_layer in get_configs():
 
         print(f"Recibido raw:\n{data}")
 
-        parsed_data = parse_data(data)
+        parsed_data = parse_data(data, protocol)
 
         if parsed_data is not None:
             print(f"Recibido:\n{parsed_data}")
