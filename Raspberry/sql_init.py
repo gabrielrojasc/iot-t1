@@ -53,8 +53,6 @@ createLoss = """CREATE TABLE Loss (
 
     Timedelay DATETIME DEFAULT CURRENT_TIMESTAMP,
     Packet_loss INTEGER,
-
-    FOREIGN KEY(datos) REFERENCES Datos(id_datos)
 );"""
 
 
