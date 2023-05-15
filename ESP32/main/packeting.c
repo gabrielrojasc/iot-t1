@@ -83,8 +83,6 @@ char *mensaje(char protocol, char transportLayer)
   free(hdr);
   free(data);
 
-  ESP_LOGI("mensaje", "mensaje: %s", mnsj);
-
   return mnsj;
 }
 

@@ -15,6 +15,7 @@
 #include <unistd.h>
 
 #include "esp_sntp.h"
+#include "esp_sleep.h"
 
 extern int create_TCP_socket();
 extern int create_UDP_socket();
@@ -38,6 +39,7 @@ void app_main(void)
    * examples/protocols/README.md for more information about this function.
    */
   ESP_ERROR_CHECK(example_connect());
+  esp_sleep_disable_wakeup_source(ESP_SLEEP_WAKEUP_TIMER);
 
   int sock_UDP = create_UDP_socket();
   int sock_TCP = create_TCP_socket();
@@ -46,8 +48,13 @@ void app_main(void)
     char *config = fetch_config(sock_TCP);
     while (config == NULL)
     {
+      ESP_LOGE("main", "Error occurred during fetching config");
+      close_socket(sock_TCP);
+      int sock_TCP = create_TCP_socket();
+      close_socket(sock_UDP);
+      int sock_UDP = create_UDP_socket();
       config = fetch_config(sock_TCP);
-      delay(60);
+      esp_deep_sleep(60 * 1000 * 1000);
     }
     protocol = config[0];
     transportLayer = config[1];
@@ -71,7 +78,7 @@ void app_main(void)
         }
 
         ESP_LOGI("TCP", "Message sent");
-        // sleep(60);
+        esp_deep_sleep(60 * 1000 * 1000);
       }
       else
       {
@@ -88,7 +95,7 @@ void app_main(void)
         }
 
         ESP_LOGI("UDP", "Message sent");
-        // vTaskDelay(2000 / portTICK_PERIOD_MS);
+        vTaskDelay(2000 / portTICK_PERIOD_MS);
       }
     }
   }

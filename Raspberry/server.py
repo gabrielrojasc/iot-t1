@@ -20,7 +20,7 @@ def TCP_frag_recv(conn):
                 doc += data
         except socket.timeout:
             conn.send(b"\0")
-            break
+            raise socket.timeout
         except Exception:
             conn.send(b"\0")
             raise
@@ -39,7 +39,7 @@ def UDP_frag_recv(s):
             else:
                 doc += data
         except socket.timeout:
-            break
+            raise socket.timeout
         except Exception:
             raise
         s.sendto(b"\1", addr)
@@ -102,6 +102,9 @@ for protocol, transport_layer in get_configs():
             else:  # UDP
                 data, udp_addr = UDP_frag_recv(sUDP)
         except ConnectionResetError:
+            break
+        except socket.timeout:
+            print("Timeout")
             break
 
         if data == b"":
