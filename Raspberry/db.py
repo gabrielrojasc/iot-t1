@@ -17,9 +17,9 @@ def save_packet_loss(data, bytes_loss):
     now = time.time()
     with sql.connect("DB.sqlite") as con:
         cur = con.cursor()
-        timestamp = data.get("Timestamp", None)
         delay = None
-        if timestamp is not None:
+        if data is not None:
+            timestamp = data.get("Timestamp")
             delay = timestamp - now
 
         cur.execute(

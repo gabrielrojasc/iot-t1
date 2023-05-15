@@ -6,6 +6,8 @@
 #include "esp_mac.h"
 #include "esp_log.h"
 
+#include <time.h>
+
 extern char *dataprotocol0();
 extern char *dataprotocol1();
 extern char *dataprotocol2();
@@ -95,7 +97,7 @@ char *dataprotocol0()
   msg[0] = val;
   char batt = (void *)batt_sensor();
   msg[1] = batt;
-  long t = 0;
+  long t = time(NULL);
   memcpy((void *)&(msg[2]), (void *)&t, 4);
   return msg;
 }

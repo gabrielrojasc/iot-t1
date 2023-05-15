@@ -60,6 +60,8 @@ void app_main(void)
           ESP_LOGE("main", "Error occurred during sending: errno %d", err);
           close_socket(sock_TCP);
           int sock_TCP = create_TCP_socket();
+          close_socket(sock_UDP);
+          int sock_UDP = create_UDP_socket();
           break;
         }
 
@@ -75,6 +77,8 @@ void app_main(void)
           ESP_LOGE("main", "Error occurred during sending: errno %d", err);
           close_socket(sock_UDP);
           int sock_UDP = create_UDP_socket();
+          close_socket(sock_TCP);
+          int sock_TCP = create_TCP_socket();
           break;
         }
 
@@ -95,15 +99,14 @@ void set_system_time(time_t timestamp)
 char *fetch_config(int sock)
 {
   char *config = malloc(1024 * sizeof(char));
-  int len1 = recv(sock, config, sizeof(config) - 1, 0);
+  int len = recv(sock, config, sizeof(config) - 1, 0);
   ESP_LOGE("fetch_config", "config: %s", config);
-  config[len2] = '\0';
+  config[len] = '\0';
 
-  long long unix_timestamp = malloc(sizeof(long long));
-  recv(sock, config, sizeof(unix_timestamp) - 1, 0);
+  long long unix_timestamp;
+  recv(sock, &unix_timestamp, sizeof(unix_timestamp), 0);
   ESP_LOGI("fetch_config", "rb Unix timestamp: %lld\n", unix_timestamp);
   set_system_time(unix_timestamp);
-  free(unix_timestamp);
 
   return (char *)config;
 }
