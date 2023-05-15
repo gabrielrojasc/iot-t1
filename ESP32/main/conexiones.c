@@ -94,7 +94,6 @@ int TCP_send_frag(int sock, char protocolo)
 {
   // Parte el mensaje (payload) en trozos de 1000 btyes y los manda por separado, esperando un OK con cada trozo
   char status = '1';
-  printf("Sending!\n");
   char *payload = mensaje(protocolo, status);
   int payloadLen = messageLength(protocolo);
   int PACK_LEN = 1024;
@@ -155,7 +154,6 @@ int UDP_send_frag(int sock, char protocolo)
   dest_addr.sin_port = htons(PORT_UDP);
 
   // Parte el mensaje (payload) en trozos de 1000 btyes y los manda por separado, esperando un OK con cada trozo
-  printf("Sending!\n");
   char *payload = mensaje(protocolo, status);
   int payloadLen = messageLength(protocolo);
   int PACK_LEN = 1024;

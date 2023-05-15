@@ -13,3 +13,9 @@ esp32
 │   └── sensors.c
 └── sdkconfig
 ```
+
+To run (macos):
+
+```bash
+idf.py build && idf.py -p /dev/cu.usbserial-001 flash monitor
+```

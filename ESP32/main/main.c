@@ -55,7 +55,7 @@ void app_main(void)
       close_socket(sock_UDP);
       int sock_UDP = create_UDP_socket();
       config = fetch_config(sock_TCP);
-      esp_deep_sleep_start();
+      sleep(15);
     }
     protocol = config[0];
     transportLayer = config[1];
@@ -79,7 +79,8 @@ void app_main(void)
         }
 
         ESP_LOGI("TCP", "Message sent");
-        esp_deep_sleep_start();
+        sleep(60);
+        // esp_deep_sleep_start();
       }
       else
       {
