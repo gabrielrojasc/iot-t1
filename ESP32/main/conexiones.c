@@ -123,6 +123,7 @@ int TCP_send_frag(int sock, char protocolo)
     {
       // En caso de error abortamos
       ESP_LOGE(TAG, "recv failed: errno %d", errno);
+      free(payload);
       return -1;
     }
     else
@@ -184,6 +185,7 @@ int UDP_send_frag(int sock, char protocolo)
     {
       // En caso de error abortamos
       ESP_LOGE(TAG, "recv failed: errno %d", errno);
+      free(payload);
       return -1;
     }
     else

@@ -1,5 +1,4 @@
 from struct import unpack, pack
-import traceback
 from db import data_save
 
 # Documentación struct unpack,pack :https://docs.python.org/3/library/struct.html#
@@ -107,5 +106,4 @@ def data_dict(protocol: int, data):
         keys = p[protocol]
         return {key: val for (key, val) in zip(keys, unp)}
     except Exception:
-        print("Data unpacking Error:", traceback.format_exc())
         return None

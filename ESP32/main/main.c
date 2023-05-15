@@ -44,6 +44,11 @@ void app_main(void)
   while (1)
   {
     char *config = fetch_config(sock_TCP);
+    while (config == NULL)
+    {
+      config = fetch_config(sock_TCP);
+      delay(60);
+    }
     protocol = config[0];
     transportLayer = config[1];
     free(config);
@@ -100,13 +105,20 @@ char *fetch_config(int sock)
 {
   char *config = malloc(1024 * sizeof(char));
   int len = recv(sock, config, sizeof(config) - 1, 0);
-  ESP_LOGE("fetch_config", "config: %s", config);
+  if (len < 0)
+  {
+    return NULL;
+  }
+  ESP_LOGI("fetch_config", "config: %s", config);
   config[len] = '\0';
 
   long long unix_timestamp;
-  recv(sock, &unix_timestamp, sizeof(unix_timestamp), 0);
+  int len2 = recv(sock, &unix_timestamp, sizeof(unix_timestamp), 0);
+  if (len2 < 0)
+  {
+    return NULL;
+  }
   ESP_LOGI("fetch_config", "rb Unix timestamp: %lld\n", unix_timestamp);
   set_system_time(unix_timestamp);
-
   return (char *)config;
 }
