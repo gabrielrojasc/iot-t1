@@ -47,10 +47,11 @@ def UDP_frag_recv(s):
 
 
 def send_config(socket, protocol, transport_layer):
+    packet = pack("<2c", str(protocol).encode(), str(transport_layer).encode())
+    socket.sendall(packet)
+    print(f"Enviado: {packet}")
     current_time = time.time()
-    packet = pack(
-        "<2cq", str(protocol).encode(), str(transport_layer).encode(), int(current_time)
-    )
+    packet = pack("<q", int(current_time))
     socket.sendall(packet)
     print(f"Enviado: {packet}")
 
@@ -82,6 +83,7 @@ buffer = 1024
 
 
 for protocol, transport_layer in get_configs():
+    print("Esperando conexión...")
     conn, addr = s.accept()
     print(f"Conectado por alguien ({addr[0]}) desde el puerto {addr[1]}")
     send_config(conn, protocol, transport_layer)

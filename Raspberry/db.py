@@ -29,6 +29,9 @@ def save_packet_loss(data, bytes_loss):
 
 
 def data_save(header, data, bytes_loss):
+    save_packet_loss(data, bytes_loss)
+    if header is None or data is None:
+        return
     with sql.connect("DB.sqlite") as con:
         cur = con.cursor()
 
@@ -101,5 +104,3 @@ def data_save(header, data, bytes_loss):
                 header["protocol"],
             ),
         )
-
-    save_packet_loss(data, bytes_loss)
