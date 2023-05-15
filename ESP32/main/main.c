@@ -39,7 +39,8 @@ void app_main(void)
    * examples/protocols/README.md for more information about this function.
    */
   ESP_ERROR_CHECK(example_connect());
-  esp_sleep_disable_wakeup_source(ESP_SLEEP_WAKEUP_TIMER);
+
+  esp_sleep_enable_timer_wakeup(60 * 1000 * 1000);
 
   int sock_UDP = create_UDP_socket();
   int sock_TCP = create_TCP_socket();
@@ -54,7 +55,7 @@ void app_main(void)
       close_socket(sock_UDP);
       int sock_UDP = create_UDP_socket();
       config = fetch_config(sock_TCP);
-      esp_deep_sleep(60 * 1000 * 1000);
+      esp_deep_sleep_start();
     }
     protocol = config[0];
     transportLayer = config[1];
@@ -78,7 +79,7 @@ void app_main(void)
         }
 
         ESP_LOGI("TCP", "Message sent");
-        esp_deep_sleep(60 * 1000 * 1000);
+        esp_deep_sleep_start();
       }
       else
       {

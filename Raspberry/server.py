@@ -12,7 +12,7 @@ def TCP_frag_recv(conn):
     doc = b""
     while True:
         try:
-            conn.settimeout(5)
+            # conn.settimeout(5)
             data = conn.recv(1024)
             if data == b"\0":
                 break
